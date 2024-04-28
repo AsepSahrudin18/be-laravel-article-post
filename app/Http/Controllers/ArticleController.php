@@ -61,18 +61,27 @@ class ArticleController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
+        // Validasi input
+        $validatedData = $request->validate([
+            'title'     => 'required|min:20',
+            'content'   => 'required|min:200',
+            'category'  => 'required|min:3',
+            'status'    => 'required|in:publish,draft,trash',
+        ]);
+
         $article = Article::find($id);
         
             if($article){
                 $input = [
-                    'title'         => $request->title ?? $article->title,
-                    'content'       => $request->content ?? $article->content,
-                    'category'      => $request->category ?? $article->category,
-                    'status'        => $request->status ?? $article->status,
+                    'title'         => $validatedData['title'] ?? $article->title,
+                    'content'       => $validatedData['content'] ?? $article->content,
+                    'category'      => $validatedData['category'] ?? $article->category,
+                    'status'        => $validatedData['status'] ?? $article->status,
                     'updated_at'  => Carbon::now(),
                 ];
                 $article->update($input);
-    
+
                 $data = [
                     'message' => 'Resource is update successfully',
                     'data' => $article

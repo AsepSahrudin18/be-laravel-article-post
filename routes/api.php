@@ -27,3 +27,4 @@ Route::get('/article', [ArticleController::class, 'index'])->name('article.index
 Route::get('/article/{id}', [ArticleController::class, 'show'])->name('article.show');
 Route::put('/article/{id}', [ArticleController::class, 'update'])->name('article.update');
 Route::delete('/article/{id}', [ArticleController::class, 'destroy'])->name('article.destroy');
+
