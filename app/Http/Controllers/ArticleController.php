@@ -11,28 +11,35 @@ use Carbon\Carbon;
 
 class ArticleController extends Controller
 {
-    public function index($limit, $offset)
+    public function index(Request $request)
     {
+        // Mendapatkan nilai limit dan offset dari query parameter
+        $limit = $request->query('limit', 10); // Default limit 10 jika tidak ada parameter limit
+        $offset = $request->query('offset', 0);
+
         // Validasi $limit dan $offset
         $validatedLimit = max(1, min($limit, 100)); 
         $validatedOffset = max(0, $offset);
 
+        // Mengambil data artikel dengan paging menggunakan limit dan offset
         $articles = Article::skip($validatedOffset)->take($validatedLimit)->get();
-        if($articles){
-            // membuat deskripsi/keterangan
+
+        if($articles->count() > 0){
             $data = [
-                "message" => "Get All Resource",
+                "message" => "Get All Resources",
                 "data" => $articles
             ];
 
             return response()->json($data, 200);
-        }else{
+        } else {
             $data = [
                 "message" => "Resource Not Found"
             ];
             return response()->json($data, 404);
         }
     }
+
+
 
     public function show($id)
     {
@@ -97,12 +104,12 @@ class ArticleController extends Controller
     {
         // Validasi input
         $validatedData = $request->validate([
-            'title' => 'required|min:20',
-            'content' => 'required|min:200',
-            'category' => 'required|min:3',
-            'status' => 'required|in:publish,draft,trash',
+            'title'     => 'required|min:20',
+            'content'   => 'required|min:200',
+            'category'  => 'required|min:3',
+            'status'    => 'required|in:publish,draft,trash',
         ]);
-        
+
         // Buat artikel baru dengan data yang divalidasi
         $input['title']         = $validatedData['title'];
         $input['content']       = $validatedData['content'];
