@@ -95,17 +95,27 @@ class ArticleController extends Controller
 
     public function store(Request $request)
     {
-            $input['title']         = $request->title;
-            $input['content']       = $request->content;
-            $input['category']      = $request->category;
-            $input['status']        = $request->status;
-            $input['updated_at']    = Carbon::now();
-    
-            $article = Article::create($input);
+        // Validasi input
+        $validatedData = $request->validate([
+            'title' => 'required|min:20',
+            'content' => 'required|min:200',
+            'category' => 'required|min:3',
+            'status' => 'required|in:publish,draft,trash',
+        ]);
+        
+        // Buat artikel baru dengan data yang divalidasi
+        $input['title']         = $validatedData['title'];
+        $input['content']       = $validatedData['content'];
+        $input['category']      = $validatedData['category'];
+        $input['status']        = $validatedData['status'];
+        $input['updated_at']    = Carbon::now();
+        $article = Article::create($input);
 
-            $data['message']    = "Article is Created";
-            $data['data']       = $article;
+        // Kirim respons JSON
+        $data['message'] = "Article is Created";
+        $data['data'] = $article;
 
-            return response()->json($data, 201);
+        return response()->json($data, 201);
     }
+
 }
