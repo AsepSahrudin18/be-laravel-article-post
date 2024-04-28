@@ -10,7 +10,7 @@
 
 ### 5. composer update
 
-### 6. create .env dengan cara cp .env .env.example lalu buka file .env tersebut dan settup pada bagian:
+### 6. create .env dengan cara ketik pada cmd atau terminal (jika menggunakan linux): cp .env .env.example lalu buka file .env tersebut dan settup pada bagian:
 
 DB_DATABASE=
 DB_USERNAME=root
