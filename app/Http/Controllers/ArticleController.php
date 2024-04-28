@@ -92,4 +92,20 @@ class ArticleController extends Controller
             return response()->json(['message' => 'Resource Not Found'], 404);
         }
     }
+
+    public function store(Request $request)
+    {
+            $input['title']         = $request->title;
+            $input['content']       = $request->content;
+            $input['category']      = $request->category;
+            $input['status']        = $request->status;
+            $input['updated_at']    = Carbon::now();
+    
+            $article = Article::create($input);
+
+            $data['message']    = "Article is Created";
+            $data['data']       = $article;
+
+            return response()->json($data, 201);
+    }
 }
